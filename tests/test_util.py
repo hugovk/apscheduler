@@ -330,7 +330,7 @@ class TestCheckCallableArgs(object):
         """Tests that a function where signature() fails is accepted."""
         check_callable_args(object().__setattr__, ('blah', 1), {})
 
-    @minpython(3, 4)
+    @minpython(3, 5)
     @pytest.mark.skipif(platform.python_implementation() == 'PyPy',
                         reason='PyPy does not expose signatures of builtins')
     def test_positional_only_args(self):
