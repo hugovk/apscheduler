@@ -19,17 +19,17 @@ setup(
     author=u'Alex Grönholm',
     author_email='apscheduler@nextday.fi',
     url='https://github.com/agronholm/apscheduler',
-    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*',
+    python_requires='>=3.5',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3 :: Only',
     ],
     keywords='scheduling cron',
     license='MIT',
@@ -44,8 +44,6 @@ setup(
         'tzlocal >= 1.2',
     ],
     extras_require={
-        ':python_version == "2.7"': ['futures', 'funcsigs'],
-        'asyncio:python_version == "2.7"': ['trollius'],
         'gevent': ['gevent'],
         'mongodb': ['pymongo >= 2.8'],
         'redis': ['redis >= 3.0'],
@@ -56,11 +54,10 @@ setup(
         'zookeeper': ['kazoo'],
         'testing': [
             'pytest < 3.7',
+            'pytest_asyncio',
             'pytest-cov',
             'pytest-tornado5'
         ],
-        'testing:python_version == "2.7"': ['mock'],
-        'testing:python_version >= "3.5"': ['pytest_asyncio'],
         'doc': [
             'sphinx',
             'sphinx-rtd-theme',

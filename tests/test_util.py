@@ -188,7 +188,7 @@ class TestGetCallableName(object):
         (DummyClass.staticmeth, 'DummyClass.staticmeth' if
          hasattr(DummyClass, '__qualname__') else 'staticmeth'),
         (DummyClass.classmeth, 'DummyClass.classmeth'),
-        (DummyClass.meth, 'meth' if sys.version_info[:2] == (3, 2) else 'DummyClass.meth'),
+        (DummyClass.meth, 'DummyClass.meth'),
         (DummyClass().meth, 'DummyClass.meth'),
         (DummyClass, 'DummyClass'),
         (DummyClass(), 'DummyClass')
@@ -210,8 +210,6 @@ class TestObjToRef(object):
         exc = pytest.raises(ValueError, obj_to_ref, obj)
         assert str(exc.value) == error
 
-    @pytest.mark.skipif(sys.version_info[:2] < (3, 3),
-                        reason='Requires __qualname__ (Python 3.3+)')
     def test_nested_function_error(self):
         def nested():
             pass
@@ -220,24 +218,11 @@ class TestObjToRef(object):
         assert str(exc.value) == 'Cannot create a reference to a nested function'
 
     @pytest.mark.parametrize('input,expected', [
-        pytest.mark.skipif(sys.version_info[:2] == (3, 2),
-                           reason="Unbound methods can't be resolved on Python 3.2")(
-            (DummyClass.meth, 'tests.test_util:DummyClass.meth')
-        ),
+        (DummyClass.meth, 'tests.test_util:DummyClass.meth'),
         (DummyClass.classmeth, 'tests.test_util:DummyClass.classmeth'),
-        pytest.mark.skipif(sys.version_info < (3, 3),
-                           reason="Requires __qualname__ (Python 3.3+)")(
-            (DummyClass.InnerDummyClass.innerclassmeth,
-             'tests.test_util:DummyClass.InnerDummyClass.innerclassmeth')
-        ),
-        pytest.mark.skipif(sys.version_info < (3, 3),
-                           reason="Requires __qualname__ (Python 3.3+)")(
-            (DummyClass.staticmeth, 'tests.test_util:DummyClass.staticmeth')
-        ),
-        pytest.mark.skipif(sys.version_info >= (3, 2),
-                           reason="Unbound methods (Python 3.2) and __qualname__ (Python 3.3+)")(
-            (InheritedDummyClass.pause, 'tests.test_util:InheritedDummyClass.pause')
-        ),
+        (DummyClass.InnerDummyClass.innerclassmeth,
+         'tests.test_util:DummyClass.InnerDummyClass.innerclassmeth'),
+        (DummyClass.staticmeth, 'tests.test_util:DummyClass.staticmeth'),
         (timedelta, 'datetime:timedelta'),
     ], ids=['unbound method', 'class method', 'inner class method', 'static method',
             'inherited class method', 'timedelta'])
